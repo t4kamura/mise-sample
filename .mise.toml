@@ -1,0 +1,35 @@
+[env]
+# インラインで環境変数を定義可能
+ENV_NAME = "develop"
+
+ # .env に設定された環境変数を反映する
+mise.file = ".env"
+
+[tools]
+go = "1.18"
+pre-commit = "latest"
+shellcheck = "latest"
+
+[tasks.setup]
+description = "Setup project"
+run = "mise i && pre-commit install && go mod download"
+
+[tasks.build]
+description = "Build"
+run = "go build -ldflags='-s -w' -trimpath -o mise-sample main.go"
+
+[tasks.test]
+description = "Run tests"
+run = "go test ./..."
+
+[tasks.fmt]
+description = "Run go fmt"
+run = "go fmt"
+
+[tasks.ci]
+description = "Run CI tasks"
+depends = ["test", "fmt"]
+
+[tasks.deploy]
+description = "Deploy app"
+file = "scripts/deploy.sh"
